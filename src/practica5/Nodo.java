@@ -16,6 +16,7 @@ public class Nodo {
     int costo;
     int[][] estado=new int[3][3];
     static int contador=0;
+    int disManh=0;
     
     
     public Nodo(){
@@ -38,6 +39,25 @@ public class Nodo {
             
         }
         this.indice=indice;       
+    }
+    
+    public void distManh(int[][] solucion){
+        for (int i = 0; i < this.estado.length; i++) {
+            for (int j = 0; j < this.estado[i].length; j++) {
+                if(this.estado[i][j]==solucion[i][j])
+                    continue;
+                else{
+                    for (int k = 0; k < solucion.length; k++) {
+                        for (int l = 0; l < solucion[k].length; l++) {
+                            if(this.estado[i][j]==solucion[k][l])
+                                this.disManh+=Math.abs(i-k) + Math.abs(j-l);
+                        }
+                    }
+                }
+            }
+            
+        }
+        System.out.println("Distancia Manhattan"+this.disManh);
     }
 
     

@@ -12,7 +12,9 @@ import java.util.concurrent.TimeUnit;
  * @author BELTRAN
  */
 public class Puzzle {
-    int[][] solucion={{1,2,3},{4,5,6},{7,8,0}};
+    int[][] solucion={{1,2,3},
+                      {4,5,6},
+                      {7,8,0}};
     Scanner pause = new Scanner(System.in);
     String[][] Acciones = {{"Abajo","Derecha"},{"Abajo", "Izquierda","Derecha"},{"Abajo", "Izquierda"},
                            {"Abajo","Derecha", "Arriba"},{"Abajo", "Izquierda","Derecha", "Arriba"},{"Abajo", "Izquierda", "Arriba"},
@@ -23,7 +25,8 @@ public class Puzzle {
     
     
     public Puzzle(Nodo problema){
-        busqueda_profundidad_limitada(problema);
+        problema.distManh(solucion);
+        //busqueda_profundidad_limitada(problema);
         
     }
     
