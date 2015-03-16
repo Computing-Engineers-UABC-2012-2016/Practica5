@@ -14,17 +14,17 @@ import java.util.*;
 public class Menu {
     
     public Menu(){
-        int[][] problema={  {1,2,3},
-                            {4,5,6},
-                            {7,8,0}};
-        if(Evaluacion(problema)){
+        int[][] problema={  {1,2,0},
+                            {4,5,3},
+                            {7,8,6}};
+//        if(Evaluacion(problema)){
             Nodo nodoProblema=new Nodo();
             nodoProblema.estado=problema;
             Puzzle puzzle=new Puzzle(nodoProblema);            
-        }
-        else{
-            System.out.println("Sistema no Tiene Solucion");
-        }
+//        }
+//        else{
+//            System.out.println("Sistema no Tiene Solucion");
+//        }
 
    
     }

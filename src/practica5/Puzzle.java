@@ -16,69 +16,89 @@ public class Puzzle {
                       {4,5,6},
                       {7,8,0}};
     Scanner pause = new Scanner(System.in);
-    String[][] Acciones = {{"Abajo","Derecha"},{"Abajo", "Izquierda","Derecha"},{"Abajo", "Izquierda"},
-                           {"Abajo","Derecha", "Arriba"},{"Abajo", "Izquierda","Derecha", "Arriba"},{"Abajo", "Izquierda", "Arriba"},
-                           {"Derecha", "Arriba"},{ "Izquierda","Derecha", "Arriba"},{"Izquierda", "Arriba"}};
+    String[][] Acciones = {{"Derecha","Abajo"},{"Derecha", "Izquierda","Abajo"},{ "Izquierda","Abajo"},
+                           { "Arriba","Derecha","Abajo"},{ "Arriba","Derecha","Izquierda","Abajo"},{ "Arriba", "Izquierda","Abajo"},
+                           {"Arriba","Derecha"},{ "Arriba","Derecha","Izquierda" },{ "Arriba","Izquierda"}};
     
-    boolean limiteAlcanzado = false;
-    boolean solucionEncontrada = false;
+    LinkedList frontera = new LinkedList();
+    LinkedList explorados = new LinkedList();
     
     
     public Puzzle(Nodo problema){
-        busqueda_profundidad_limitada(problema);
+        busqueda_A(problema);
         
     }
     
-    public void busqueda_profundidad_limitada(Nodo problema){
-        for (int limite = 1;; limite++) {
-            if(BPL_recursivo(problema, limite)){
-                System.out.println("Nodo no encontrado, (Se llego al LIMITE en el nivel "+limite+")");            
-            }
-            else
-            {
+    public void busqueda_A(Nodo problema){
+            Busqueda_A(problema);
+    }
+    
+    public void Busqueda_A(Nodo problema){
+
+        Nodo nodo=(Nodo)problema;
+        frontera.clear();
+        explorados.clear();
+        frontera.add(problema);
+        if(frontera.isEmpty()){
+            System.out.println("FRONTERA VACIA");
+            return;
+        }
+        while (true) { 
+            Nodo nodoPadre=(Nodo)frontera.pollFirst();
+//            System.out.println("Nodo padre");
+//            imprimir(nodoPadre);
+//            pause.next();
+            
+            if(Arrays.deepEquals(nodoPadre.estado, solucion)){
                 System.out.println("SOLUCION ENCONTRADA");
-                break;
+                imprimirSolucion(nodoPadre);
+                return;
             }
-        }
-
-        
-
-
-    }
-    
-    public boolean BPL_recursivo(Nodo problema,int limite){
-        //Tenemos una bandera que verifica si se encontro la solucion
-        if (!solucionEncontrada) {
-            //Si el nodo es la meta entonces la iteratividad termina y se 
-            //Imprime la solucion
-            if (Arrays.deepEquals(problema.estado, solucion)) {
-                imprimirSolucion(problema);
-                solucionEncontrada = true;
-                return false;
-            } 
-            /*Si se llega al limite entonces returnamos el valor de limite alcanzado*/
-            else if (limite == 0) {
-                return limiteAlcanzado;
-            }
-            /*Se obtiene el indice del numero 0 de la matriz*/
-            problema.getIndicedelNodo();
-            for (String accionPosible : Acciones[problema.indice]) {
-                Nodo hijo = crearNodo(problema,(String)accionPosible);
-                boolean Resultado = BPL_recursivo(hijo, limite - 1);
-                if (Resultado == limiteAlcanzado) {
-                    limiteAlcanzado = true;
-                } 
-                else {
-                    return Resultado;
+            nodoPadre.getIndicedelNodo();
+            explorados.add(nodoPadre);
+            for (String accionPosible : Acciones[nodoPadre.indice]){
+                Nodo hijo = crearNodo(nodoPadre,(String)accionPosible);
+//                System.out.println("Nodo Hijo");
+//                imprimir(hijo);
+//                pause.next();                
+                if((!estaExplorados(hijo)&&!estaFrontera(hijo))){
+//                    System.out.println("Nodo Hijo ENTRO A FRONTERA");
+//                    imprimir(hijo);
+//                    pause.next();
+                    frontera.addFirst(hijo);
                 }
+                
             }
-            return limiteAlcanzado;
+            
         }
-        return false;        
-
        
     }
+    public boolean estaFrontera(Nodo hijo){
+        LinkedList auxFrontera=new LinkedList(frontera);
+        Nodo auxNodo;
+        while(!auxFrontera.isEmpty()){
+            auxNodo=(Nodo)auxFrontera.poll();
+            if(Arrays.deepEquals(hijo.estado, auxNodo.estado))
+                return true;
 
+        }
+            
+      return false;  
+        
+    }
+    public boolean estaExplorados(Nodo hijo){
+        LinkedList auxExplorados=new LinkedList(explorados);
+        Nodo auxNodo;
+        while(!auxExplorados.isEmpty()){
+            auxNodo=(Nodo)auxExplorados.poll();
+            if(Arrays.deepEquals(hijo.estado, auxNodo.estado))
+                return true;
+
+        }
+            
+      return false;  
+       
+    }
    
     public Nodo crearNodo(Nodo nodoPadre,String accion){
         Nodo hijo=new Nodo();
