@@ -16,13 +16,16 @@ public class Nodo {
     int costo;
     int[][] estado=new int[3][3];
     static int contador=0;
-    int disManh=0;
+    int disManh;
+    int desacomodados;
     
     
     public Nodo(){
         NodoPadre=null;
         costo=0;
         contador++;
+        disManh=0;
+        desacomodados=0;
         
     }
     public void getIndicedelNodo(){
@@ -57,8 +60,18 @@ public class Nodo {
             }
             
         }
-        System.out.println("Distancia Manhattan"+this.disManh);
+        
     }
 
+    public void CuantosDesacomodados(int[][] solucion){
+        
+        for (int i = 0; i < this.estado.length; i++) {
+            for (int j = 0; j < this.estado[i].length; j++) {
+                if(this.estado[i][j]!=solucion[i][j])
+                    this.desacomodados++;    
+            }
+        }
+        System.out.println("->"+this.desacomodados);
+    }
     
 }

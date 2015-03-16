@@ -25,8 +25,7 @@ public class Puzzle {
     
     
     public Puzzle(Nodo problema){
-        problema.distManh(solucion);
-        //busqueda_profundidad_limitada(problema);
+        busqueda_profundidad_limitada(problema);
         
     }
     
