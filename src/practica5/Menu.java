@@ -14,9 +14,9 @@ import java.util.*;
 public class Menu {
     
     public Menu(){
-        int[][] problema={  {1,2,0},
-                            {4,5,3},
-                            {7,8,6}};
+        int[][] problema={{1,5,3},
+                          {8,0,6},
+                          {4,7,2}};
 //        if(Evaluacion(problema)){
             Nodo nodoProblema=new Nodo();
             nodoProblema.estado=problema;

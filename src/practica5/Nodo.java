@@ -18,11 +18,12 @@ public class Nodo {
     static int contador=0;
     int disManh;
     int desacomodados;
+    int heuristica;
     
     
     public Nodo(){
         NodoPadre=null;
-        costo=0;
+        costo=1;
         contador++;
         disManh=0;
         desacomodados=0;
@@ -44,7 +45,7 @@ public class Nodo {
         this.indice=indice;       
     }
     
-    public void distManh(int[][] solucion){
+    public int distManh(int[][] solucion){
         for (int i = 0; i < this.estado.length; i++) {
             for (int j = 0; j < this.estado[i].length; j++) {
                 if(this.estado[i][j]==solucion[i][j])
@@ -60,10 +61,13 @@ public class Nodo {
             }
             
         }
+        int distancia;
+        return distancia=this.disManh;
+        
         
     }
 
-    public void CuantosDesacomodados(int[][] solucion){
+    public int CuantosDesacomodados(int[][] solucion){
         
         for (int i = 0; i < this.estado.length; i++) {
             for (int j = 0; j < this.estado[i].length; j++) {
@@ -71,7 +75,14 @@ public class Nodo {
                     this.desacomodados++;    
             }
         }
-        System.out.println("->"+this.desacomodados);
+        int desacomodados;
+        return desacomodados=this.desacomodados;
     }
+    public int getheuristica(){
+        return this.heuristica;
+    }
+
+
+    
     
 }

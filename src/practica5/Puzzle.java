@@ -5,7 +5,8 @@
  */
 package practica5;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+
+
 
 /**
  *
@@ -19,14 +20,25 @@ public class Puzzle {
     String[][] Acciones = {{"Derecha","Abajo"},{"Derecha", "Izquierda","Abajo"},{ "Izquierda","Abajo"},
                            { "Arriba","Derecha","Abajo"},{ "Arriba","Derecha","Izquierda","Abajo"},{ "Arriba", "Izquierda","Abajo"},
                            {"Arriba","Derecha"},{ "Arriba","Derecha","Izquierda" },{ "Arriba","Izquierda"}};
-    
-    LinkedList frontera = new LinkedList();
+    //LinkedList frontera = new LinkedList();
     LinkedList explorados = new LinkedList();
+    Queue<Nodo> frontera = new PriorityQueue<Nodo>(new Comparator<Nodo>() {
+      public int compare(Nodo a1, Nodo a2) {
+          		if (a1.getheuristica() < a2.getheuristica()) {
+			return -1;
+		} else if (a1.getheuristica() > a2.getheuristica()) {
+			return 1;
+		}
+		
+        return 0; 
+      }
+    });    
+
     
-    
+//////////////////////////////////////////////////////////////    
     public Puzzle(Nodo problema){
         busqueda_A(problema);
-        
+ 
     }
     
     public void busqueda_A(Nodo problema){
@@ -34,43 +46,45 @@ public class Puzzle {
     }
     
     public void Busqueda_A(Nodo problema){
-
         Nodo nodo=(Nodo)problema;
-        frontera.clear();
-        explorados.clear();
-        frontera.add(problema);
-        if(frontera.isEmpty()){
-            System.out.println("FRONTERA VACIA");
+        if(Arrays.deepEquals(nodo.estado, solucion)){//Si el nodo contiene el estado Solicion entonces termine 
+            System.out.println("Es la solucion soldado");
             return;
         }
-        while (true) { 
-            Nodo nodoPadre=(Nodo)frontera.pollFirst();
-//            System.out.println("Nodo padre");
-//            imprimir(nodoPadre);
-//            pause.next();
-            
-            if(Arrays.deepEquals(nodoPadre.estado, solucion)){
-                System.out.println("SOLUCION ENCONTRADA");
-                imprimirSolucion(nodoPadre);
+        frontera.add(nodo);//Agregamos el nodo al nodo frontera
+        explorados.clear();//Exploraos es un conjunto vacio
+        
+        while (true) {
+
+            if(frontera.isEmpty()){//La frontera esta vacia
+                System.out.println("NO HAY ELEMENTOS EN LA FRONTERA");
                 return;
             }
-            nodoPadre.getIndicedelNodo();
-            explorados.add(nodoPadre);
-            for (String accionPosible : Acciones[nodoPadre.indice]){
-                Nodo hijo = crearNodo(nodoPadre,(String)accionPosible);
-//                System.out.println("Nodo Hijo");
-//                imprimir(hijo);
-//                pause.next();                
-                if((!estaExplorados(hijo)&&!estaFrontera(hijo))){
-//                    System.out.println("Nodo Hijo ENTRO A FRONTERA");
-//                    imprimir(hijo);
-//                    pause.next();
-                    frontera.addFirst(hijo);
-                }
-                
-            }
             
-        }
+            Nodo nodoPadre=(Nodo)frontera.poll();//Se extrae el nodo de la frontera
+            explorados.add(nodo);//Se agrega a explorados
+           
+            
+            //Por cada accion posible a aplicarse en nodo se evalua las posibles direcciones
+            nodoPadre.getIndicedelNodo();
+            for (String accionPosible : Acciones[nodoPadre.indice]) {
+                Nodo hijo=(Nodo)crearNodo(nodoPadre,(String)accionPosible);
+                
+                if(!estaExplorados(hijo)&&!estaFrontera(hijo)){
+                    if(Arrays.deepEquals(hijo.estado, solucion)){//Si el nodo contiene el estado Solicion entonces termine
+                        System.out.println("Es la solucion");
+                        imprimirSolucion(hijo);
+                        return;
+                    }
+                    
+                    frontera.add(hijo); 
+                    
+                }
+
+      
+            }
+        }        
+
        
     }
     public boolean estaFrontera(Nodo hijo){
@@ -104,7 +118,9 @@ public class Puzzle {
         Nodo hijo=new Nodo();
         hijo.estado=resolverProblema(copiarArreglo(nodoPadre),accion);
         hijo.NodoPadre=nodoPadre;
-        hijo.costo=nodoPadre.costo++;
+        hijo.costo=nodoPadre.costo+1;
+        //hijo.heuristica=hijo.costo+hijo.CuantosDesacomodados(solucion);
+        hijo.heuristica=hijo.costo+hijo.distManh(solucion);
         return hijo;
         
     }
@@ -222,6 +238,8 @@ public class Puzzle {
         System.out.println();
         aux=aux.NodoPadre;
         contador++;
+            System.out.println("Costo del Algotimo->"+aux.costo);
+            System.out.println("----------------------------------");
         }
         System.out.println("Numero de Niveles: "+contador);
         System.out.println("El numero de nodos creados: "+aux.contador);
@@ -245,6 +263,7 @@ public class Puzzle {
         return aux;
     }
     
+
     
     
 }
