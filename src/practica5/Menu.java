@@ -17,15 +17,15 @@ public class Menu {
         int[][] problema={{1,5,3},
                           {8,0,6},
                           {4,7,2}};
-//        if(Evaluacion(problema)){
+        if(Evaluacion(problema)){
             Nodo nodoProblema=new Nodo();
             nodoProblema.estado=problema;
             Puzzle puzzle=new Puzzle(nodoProblema);            
-//        }
-//        else{
-//            System.out.println("Sistema no Tiene Solucion");
-//        }
-
+        }
+        else{
+            System.out.println("Sistema no Tiene Solucion");
+        }
+            
    
     }
     protected boolean Evaluacion(int [][] problema){
@@ -52,7 +52,8 @@ public class Menu {
                     contador++;
             }
         }
-        if((contador%2==0)&& (bandera%2==0) )
+        System.out.println("Inverciones"+contador+" Renglon"+bandera);
+        if((contador%2==0))
             return true;
         return false;
 
